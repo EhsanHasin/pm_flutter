@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("e7 App"),
+        title: Text("Grid View Appliation"),
       ),
       body: GridView.builder(
           gridDelegate:
