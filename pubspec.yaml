@@ -11,6 +11,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   font_awesome_flutter: ^10.4.0
   fluttertoast: ^8.2.1
+  rflutter_alert: ^2.0.6
 
 dev_dependencies:
   flutter_test:
