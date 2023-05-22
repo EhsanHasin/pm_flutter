@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                     context, MaterialPageRoute(builder: (c) => RandomWord()));
               },
-              icon: Icon(FontAwesomeIcons.random))
+              icon: Icon(FontAwesomeIcons.shuffle))
         ],
       ),
       body: Container(
