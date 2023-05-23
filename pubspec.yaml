@@ -14,6 +14,7 @@ dependencies:
   rflutter_alert: ^2.0.6
   english_words: ^4.0.0
   text_to_speech: ^0.2.3
+  share_plus: ^7.0.1
 
 dev_dependencies:
   flutter_test:
