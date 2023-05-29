@@ -1,19 +1,14 @@
 # pm_flutter
 
-this is a project for PM class
+Practical project of PM(afternoon) class.
 
-## Getting Started
+## Class Details
 
-This project is a starting point for a Flutter application.
+WASSA org, 2023, Flutter PM class.
 
-A few resources to get you started if this is your first Flutter project:
+## Student Pictures
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-## new Title
-this is a new title about the project....
+![photo_2023-05-29_15-05-44](https://github.com/EhsanHasin/pm_flutter/assets/32514844/ac650f8a-d8df-4375-8d3f-156c2c52bd3e)
+![photo_2023-05-29_15-05-48](https://github.com/EhsanHasin/pm_flutter/assets/32514844/ccf79a82-008d-4372-97d4-9141a2542d50)
+![photo_2023-05-29_15-05-18](https://github.com/EhsanHasin/pm_flutter/assets/32514844/af1d143c-84b6-4c8f-80f7-9343ee180ecf)
