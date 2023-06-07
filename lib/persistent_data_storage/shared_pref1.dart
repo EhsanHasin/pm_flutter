@@ -80,7 +80,15 @@ class _HomePageState extends State<HomePage> {
                 "data = $data",
                 style: TextStyle(fontSize: 30),
               ),
-              ElevatedButton(onPressed: (){}, child: Text("Delete")),
+              ElevatedButton(onPressed: ()async{
+                preferences = await SharedPreferences.getInstance();
+                await preferences.remove(KEY_FIRST_NAME);
+                await preferences.remove(KEY_LAST_NAME);
+                await preferences.remove(KEY_AGE);
+                setState(() {
+                  data = "";
+                });
+              }, child: Text("Delete")),
             ],
           ),
         ),
