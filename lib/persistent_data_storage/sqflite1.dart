@@ -25,7 +25,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late Database database;
-  var nodeId, noteTitle, NoteDescription;
+  var noteId, noteTitle, noteDescription;
   var tecId = TextEditingController();
   var tecTitle = TextEditingController();
   var tecDescription = TextEditingController();
@@ -42,9 +42,9 @@ class _HomePageState extends State<HomePage> {
         onCreate: (db, ver) {
         db.execute('''
                   CREATE TABLE notes(
-                      not_id INT,
+                      not_id INT primary key,
                       not_title TEXT,
-                      not_description TEXT,
+                      not_description TEXT
                       ) 
             ''');
     }, version: 1);
@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                 decoration: InputDecoration(
                     hintText: "Enter Note id", label: Text("Id")),
                 onChanged: (id) {
-                  this.nodeId = id;
+                  this.noteId = id;
                 },
               ),
               TextField(
@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                     hintText: "Enter Note Description",
                     label: Text("Description")),
                 onChanged: (desc) {
-                  this.NoteDescription = desc;
+                  this.noteDescription = desc;
                 },
               ),
               SingleChildScrollView(
@@ -100,11 +100,10 @@ class _HomePageState extends State<HomePage> {
                       child: ElevatedButton(
                           onPressed: () async {
                             await database.insert("notes", {
-                              "not_id": 1,
-                              "not_title": "picnic",
-                              "not_description":
-                                  "tomorrow we will go to picnic....",
-                            });
+                              "not_id": noteId,
+                              "not_title": noteTitle,
+                              "not_description": noteDescription,
+                            }, conflictAlgorithm: ConflictAlgorithm.replace);
                           },
                           child: Text("Save Note")),
                     ),
