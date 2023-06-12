@@ -24,15 +24,30 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var nodeId, noteTitile, NoteDescription;
+  late Database database;
+  var nodeId, noteTitle, NoteDescription;
   var tecId = TextEditingController();
-  var tecName = TextEditingController();
-  var tecAge = TextEditingController();
+  var tecTitle = TextEditingController();
+  var tecDescription = TextEditingController();
   List<String> notes = List.empty(growable: true);
 
   @override
   void initState() {
     super.initState();
+    openDB();
+  }
+
+  openDB() async {
+    database = await openDatabase(join(await getDatabasesPath(), "notesDB.db"),
+        onCreate: (db, ver) {
+        db.execute('''
+                  CREATE TABLE notes(
+                      not_id INT,
+                      not_title TEXT,
+                      not_description TEXT,
+                      ) 
+            ''');
+    }, version: 1);
   }
 
   @override
@@ -60,15 +75,15 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               TextField(
-                controller: tecName,
+                controller: tecTitle,
                 decoration: InputDecoration(
                     hintText: "Enter Note title", label: Text("Title")),
                 onChanged: (title) {
-                  this.noteTitile = title;
+                  this.noteTitle = title;
                 },
               ),
               TextField(
-                controller: tecAge,
+                controller: tecDescription,
                 decoration: InputDecoration(
                     hintText: "Enter Note Description",
                     label: Text("Description")),
@@ -79,14 +94,19 @@ class _HomePageState extends State<HomePage> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
-                          onPressed: () {
-
-                          }, child: Text("Save Note")),
+                          onPressed: () async {
+                            await database.insert("notes", {
+                              "not_id": 1,
+                              "not_title": "picnic",
+                              "not_description":
+                                  "tomorrow we will go to picnic....",
+                            });
+                          },
+                          child: Text("Save Note")),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -141,5 +161,10 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
