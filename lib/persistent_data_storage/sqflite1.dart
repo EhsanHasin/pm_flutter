@@ -9,7 +9,7 @@ import 'package:sqflite/sqflite.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
-    title: "e7 App",
+    title: "SQLite Database",
     theme: ThemeData(primarySwatch: Colors.blue),
     debugShowCheckedModeBanner: false,
     home: HomePage(),
@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   var tecId = TextEditingController();
   var tecTitle = TextEditingController();
   var tecDescription = TextEditingController();
-  List<String> notes = List.empty(growable: true);
+  List<Note> notes = List.empty(growable: true);
 
   @override
   void initState() {
@@ -38,7 +38,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   openDB() async {
-    database = await openDatabase(join(await getDatabasesPath(), "notesDB.db"),
+    database = await openDatabase(
+        join(await getDatabasesPath(), "notesDB.db"),
         onCreate: (db, ver) {
         db.execute('''
                   CREATE TABLE notes(
@@ -46,8 +47,8 @@ class _HomePageState extends State<HomePage> {
                       not_title TEXT,
                       not_description TEXT
                       ) 
-            ''');
-    }, version: 1);
+            ''');},
+        version: 1);
   }
 
   @override
@@ -91,44 +92,50 @@ class _HomePageState extends State<HomePage> {
                   this.noteDescription = desc;
                 },
               ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                          onPressed: () async {
-                            await database.insert("notes", {
-                              "not_id": noteId,
-                              "not_title": noteTitle,
-                              "not_description": noteDescription,
-                            }, conflictAlgorithm: ConflictAlgorithm.replace);
-                          },
-                          child: Text("Save Note")),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                          onPressed: () {}, child: Text("List All Notes")),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                          onPressed: () {}, child: Text("Delete by Id")),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                          onPressed: () {}, child: Text("Delete All")),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                          onPressed: () {}, child: Text("Search by id")),
-                    ),
-                  ],
-                ),
+              Wrap(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          await database.insert(
+                              "notes",
+                              Note(id: int.parse(noteId), title: noteTitle, description: noteDescription).toMap(),
+                              conflictAlgorithm: ConflictAlgorithm.replace);
+                        },
+                        child: Text("Save Note")),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                        onPressed: () async{
+                          List<Map<String, dynamic>> maps =  await database.query("notes");
+                          maps.forEach((map) {
+                            var i = map["not_id"];
+                            var t = map["not_title"];
+                            var d = map["not_description"];
+                            Note tempNote = Note(id: i, title: t, description: d);
+                            notes.add(tempNote);
+                          });
+                          setState(() {});
+                        }, child: Text("List All Notes")),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                        onPressed: () {}, child: Text("Delete by Id")),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                        onPressed: () {}, child: Text("Delete All")),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                        onPressed: () {}, child: Text("Search by id")),
+                  ),
+                ],
               ),
               Expanded(
                 child: ListView.builder(
@@ -138,16 +145,16 @@ class _HomePageState extends State<HomePage> {
                         leading: CircleAvatar(
                           radius: 40,
                           backgroundColor: Colors.lightBlueAccent,
-                          child: Text(notes[i][i]),
+                          child: Text(notes[i].id.toString()),
                         ),
                         title: Text(
-                          notes[i],
+                          notes[i].title,
                           style: TextStyle(
                             fontSize: 20,
                           ),
                         ),
                         subtitle: Text(
-                          notes[i],
+                          notes[i].description,
                           style: TextStyle(
                             fontSize: 15,
                           ),
@@ -166,4 +173,22 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
   }
+
 }
+
+class Note{
+  var id;
+  var title;
+  var description;
+  Note({this.id, this.title, this.description});
+
+  Map<String,dynamic> toMap(){
+    return {
+      "not_id": id,
+      "not_title": title,
+      "not_description": description
+    };
+  }
+
+}
+
